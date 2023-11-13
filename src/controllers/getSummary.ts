@@ -1,33 +1,36 @@
 import { Request, Response } from "express";
 import { getAudio } from "../helpers/getAudio";
-import { checkSubtitles, getSubtitles } from "../helpers/getSubtitles";
+import { checkCaptions, getCaptions } from "../helpers/getCaptions";
 import { extractText } from "../helpers/ai/whisper";
-import { execute } from "../helpers/ai/llm";
+import { generateSummary } from "../helpers/ai/llm";
 import { summarizePrompt } from "../helpers/ai/prompts/summarize";
 import { join } from "path";
-import { existsSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
 
 export const getSummary = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const videoId = req.params.videoId;
   try {
-    if (await checkSubtitles(videoId)) {
-      const subtitles = await getSubtitles(videoId);
-      res.send(await execute(subtitles, summarizePrompt));
+    const videoId = req.params.videoId;
+    const textFilePath = join(__dirname, "../captions", `${videoId}.txt`);
+
+    if (await checkCaptions(videoId)) {
+      const captions = await getCaptions(videoId);
+      res.send(await generateSummary(captions, summarizePrompt));
+      if (!existsSync(textFilePath))
+        writeFileSync(textFilePath, captions, "utf-8");
       return;
     }
-    const audioFilePath = join(
-      __dirname,
-      "../downloads",
-      `${req.params.videoId}.mp3`
-    );
-    // download audio if audio doesn't exist.
-    if (!existsSync(audioFilePath)) await getAudio(videoId);
+    const audioFilePath = join(__dirname, "../downloads", `${videoId}.mp3`);
+    
+    if (!existsSync(audioFilePath)) await getAudio(videoId); // downloads audio if audio doesn't exist.
 
-    const tranribedText = await extractText(audioFilePath);
-    res.send(await execute(tranribedText, summarizePrompt));
+    const transcribedText = await extractText(audioFilePath);
+    res.send(await generateSummary(transcribedText, summarizePrompt));
+
+    if (!existsSync(textFilePath))
+      writeFileSync(textFilePath, transcribedText, "utf-8");
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
