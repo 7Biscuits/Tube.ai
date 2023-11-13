@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { getVideoId } from "../helpers/getVideoId"
 import { getAudio } from "../helpers/getAudio";
 import { checkCaptions, getCaptions } from "../helpers/getCaptions";
 import { extractText } from "../helpers/ai/whisper";
@@ -12,7 +13,7 @@ export const getSummary = async (
   res: Response
 ): Promise<void> => {
   try {
-    const videoId = req.params.videoId;
+    const videoId = getVideoId(req.body.yturl);
     const textFilePath = join(__dirname, "../captions", `${videoId}.txt`);
 
     if (await checkCaptions(videoId)) {
@@ -32,6 +33,6 @@ export const getSummary = async (
     if (!existsSync(textFilePath))
       writeFileSync(textFilePath, transcribedText, "utf-8");
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error", error: error });
   }
 };

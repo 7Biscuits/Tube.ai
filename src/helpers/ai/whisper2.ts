@@ -1,4 +1,4 @@
-/* Not using this code in the main code but keeping it as a reference. */
+/* Not using this code anywhere but keeping it as a reference. */
 
 import { OpenAI } from "langchain/llms/openai";
 import { loadQAStuffChain } from "langchain/chains";
