@@ -36,7 +36,7 @@ export const getAnswer = async (
   );
   const retriever = vectorStore.asRetriever();
 
-  const serializeChatHistory = (chatHistory: string | Array<string>) => {
+  const serializeChatHistory = (chatHistory: string | Array<string>): string => {
     if (Array.isArray(chatHistory)) {
       return chatHistory.join("\n");
     }
@@ -51,7 +51,7 @@ export const getAnswer = async (
     question: string;
     context: string;
     chatHistory?: string | Array<string>;
-  }) => {
+  }): Promise<string> => {
     const chain = new LLMChain({
       llm: model,
       prompt: questionPrompt,
@@ -109,8 +109,8 @@ export const getAnswer = async (
       question: (input: {
         question: string;
         chatHistory: string | Array<string>;
-      }) => input.question,
-      chatHistory: async () => {
+      }): string => input.question,
+      chatHistory: async (): Promise<string> => {
         const memoryResult = await memory.loadMemoryVariables({});
         return serializeChatHistory(memoryResult.chatHistory ?? "");
       },
@@ -135,7 +135,7 @@ export const getAnswer = async (
       answerQuestionChain,
     ],
     [
-      async () => {
+      async (): Promise<boolean> => {
         const memoryResult = await memory.loadMemoryVariables({});
         const isChatHistoryPresent =
           !!memoryResult.chatHistory && memoryResult.chatHistory.length;
