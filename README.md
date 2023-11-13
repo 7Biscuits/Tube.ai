@@ -55,6 +55,7 @@ The summarized content and extracted captions are stored in a `.txt` file, enabl
 
 ## Usage
 
+- Set your OpenAI API key in .env file or hardcode it directly in the code file.
 - Provide the YouTube video ID to Tube.AI.
 - Tube.AI intelligently extracts content, summarizes the video, and responds to user queries.
 
