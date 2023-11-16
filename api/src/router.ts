@@ -4,4 +4,4 @@ import { askQuestion } from "./controllers/askQuestion";
 
 export const router = Router();
 router.route("/summarize").get(getSummary);
-router.route("/question").get(askQuestion);
+router.route("/question").post(askQuestion);
