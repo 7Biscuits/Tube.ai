@@ -1,6 +1,8 @@
 {
-  "name": "tube-ai",
+  "name": "tube-ai-client",
   "version": "0.1.0",
+  "repository": "https://github.com/7Biscuits/Tube.ai/tree/main/client/tube-ai",
+  "author": "Rudransh Srivastava",
   "private": true,
   "scripts": {
     "dev": "next dev",
