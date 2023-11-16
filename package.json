@@ -1,0 +1,12 @@
+{
+  "name": "tube-ai",
+  "version": "1.0.0",
+  "description": "Youtube Summarizer and Chatbot",
+  "repository": "https://github.com/7Biscuits/Tube.ai",
+  "author": "Rudransh",
+  "license": "MIT",
+  "scripts": {
+    "server": "cd ./api && yarn dev",
+    "client": "cd ./client/tube-ai && yarn dev"
+  }
+}
