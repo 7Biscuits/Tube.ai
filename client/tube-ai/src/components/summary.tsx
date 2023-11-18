@@ -7,24 +7,22 @@ type TVideoInfo = {
 
 export default function Summary({ videoId, summary }: TVideoInfo): JSX.Element {
   const opts: YouTubeProps["opts"] = {
-    width: "560",
-    height: "315",
-    allowFullScreen: false,
+    width: "550",
+    height: "315"
   };
-  
+
   return (
-    <div className="w-xl bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <YouTube videoId={videoId} opts={opts} />
+    <div className="w-[560px] mt-2 items-center mx-auto justify-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+      <div className="w-[550px] h-[315px] mx-auto mt-1">
+        <YouTube className="" videoId={videoId} opts={opts} />
+      </div>
       <div className="p-5">
-        <a href="#">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Summary
-          </h5>
-        </a>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 overflow-hidden">
-          {/* {summary} */}
-          In this YouTube video, Tom teaches viewers how to greet friends in British English. He suggests using phrases like "alright," "hello, mate," "how you doing?" and "what's happening?" to sound natural when meeting British people. Tom also encourages viewers to engage with the BBC Learning English social media pages.
-        </p>
+        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          Summary
+        </h5>
+        <div className="mb-3 font-normal text-md p-2 w-full pb-12 text-gray-700 dark:text-gray-400">
+          {summary}
+        </div>
         <a
           href="#"
           className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
