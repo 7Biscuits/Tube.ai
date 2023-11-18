@@ -1,11 +1,11 @@
-export const getSummary = async (yturl: string): Promise<string> => {
-  const res = await fetch("http://localhost:8080/api/summary", {
-    method: "GET",
+export const getSummary = async (videoid: string): Promise<string> => {
+  const res = await fetch("http://localhost:8080/api/summarize", {
+    method: "POST",
     headers: {
-      "Content-Type": "text/plain",
+      "Content-Type": "application/json",
     },
-    body: yturl,
+    body: JSON.stringify({ videoid: videoid }),
   });
-  const summary: string = await res.json();
+  const summary: string = await res.text();
   return summary;
 };

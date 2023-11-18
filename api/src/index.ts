@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import { json } from "body-parser";
+import cors from "cors";
 import { configDotenv } from "dotenv";
 import { router } from "./router";
 
@@ -12,6 +13,7 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(json());
+app.use(cors());
 
 app.get("/", (_: Request, res: Response): void => {
   res.status(200).send("Welcome to TUBE AI!");

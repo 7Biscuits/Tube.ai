@@ -12,14 +12,4 @@ export async function getAudio(videoId: string): Promise<void> {
   const audioFilePath = join(__dirname, "../downloads", `${videoId}.mp3`);
   const audioStream = ytdl(videoUrl, { quality: audioFormat.itag });
   audioStream.pipe(createWriteStream(audioFilePath));
-
-  // audioStream.on("end", () => {
-  //   returnVal = "Audio file downloaded";
-  // });
-
-  // audioStream.on("error", (error) => {
-  //   returnVal = `Error downloading audio: ${error}`;
-  // });
-
-  // return returnVal;
 }
