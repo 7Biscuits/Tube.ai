@@ -3,7 +3,7 @@ export default function Navbar() {
     <nav className="bg-transparent bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="flex items-center">
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white font-mono">
+          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white font-mono cursor-pointer">
             Tube.ai
           </span>
         </div>

@@ -1,8 +1,8 @@
 import { getInfo } from "ytdl-core";
 
 interface IVideoInfo {
-    title: string;
-    channel: string;
+  title: string;
+  channel: string;
 }
 
 export async function getVideoInfo(videoUrl: string): Promise<IVideoInfo> {

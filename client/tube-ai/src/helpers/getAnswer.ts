@@ -1,5 +1,5 @@
 export const getAnswer = async (
-  yturl: string,
+  videoId: string,
   question: string
 ): Promise<string> => {
   const res = await fetch("http://localhost:8080/api/question", {
@@ -7,8 +7,8 @@ export const getAnswer = async (
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ yturl, question }),
+    body: JSON.stringify({ videoId, question }),
   });
-  const answer: string = await res.json();
+  const answer: string = await res.text();
   return answer;
 };

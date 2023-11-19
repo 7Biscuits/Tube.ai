@@ -13,14 +13,11 @@ export const getSummary = async (
 ): Promise<void> => {
   try {
     const videoId = req.body.videoid;
-    console.log(videoId);
     const textFilePath = join(__dirname, "../captions", `${videoId}.txt`);
 
     if (await checkCaptions(videoId)) {
       const captions = await getCaptions(videoId);
-      console.log("got captions");
       const summary = await generateSummary(captions, summarizePrompt);
-      console.log(summary);
       res.send(summary);
       if (!existsSync(textFilePath))
         writeFileSync(textFilePath, captions, "utf-8");
@@ -29,10 +26,8 @@ export const getSummary = async (
     const audioFilePath = join(__dirname, "../downloads", `${videoId}.mp3`);
 
     if (!existsSync(audioFilePath)) await getAudio(videoId); // downloads audio if audio doesn't exist.
-    console.log("starting transcribing.")
     const transcribedText = await extractText(audioFilePath);
     const summary = await generateSummary(transcribedText, summarizePrompt);
-    console.log(summary);
     res.send(summary);
     if (!existsSync(textFilePath))
       writeFileSync(textFilePath, transcribedText, "utf-8");

@@ -1,27 +1,36 @@
-import { Inter } from "next/font/google";
 import Navbar from "@/components/navbar";
 import Hero from "@/components/hero";
 import Spinner from "@/components/spinner";
 import Summary from "@/components/summary";
+import ChatWindow from "@/components/chatWindow";
 import { getVideoID } from "ytdl-core";
+import { getVideoInfo } from "@/helpers/getVideoInfo";
 import { getSummary } from "@/helpers/getSummary";
-import { useState, useRef } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
+import { getAnswer } from "@/helpers/getAnswer";
+import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
   const hasFetchedSummary = useRef(false);
   const [spinner, setSpinner] = useState(false);
   const [videoId, setVideoId] = useState("");
+  const [title, setTitle] = useState("");
+  const [channel, setChannel] = useState("");
   const [summary, setSummary] = useState("");
+  const [messages, setMessages] = useState<Array<[string, boolean]>>([]);
+
+  useEffect(() => {
+    console.log("Updated messages:\n", messages);
+  }, [messages]);
 
   const handleGetSummary = async (yturl: string): Promise<void> => {
-    console.log("sending request");
     setSpinner(true);
-    setVideoId(getVideoID(yturl));
     const video_id = getVideoID(yturl);
     setVideoId(video_id);
-    await getSummary(video_id).then((sm: string) => {
+    await getVideoInfo(yturl).then(({ title, channel }): void => {
+      setTitle(title);
+      setChannel(channel);
+    });
+    await getSummary(video_id).then((sm: string): void => {
       setSummary(sm);
       setSpinner(false);
       hasFetchedSummary.current = true;
@@ -29,11 +38,18 @@ export default function Home() {
     hasFetchedSummary.current = true;
   };
 
+  const handleMessage = async (message: string) => {
+    setMessages((messages) => [...messages, [message, false]]);
+    await getAnswer(videoId, message).then((res) => {
+      setMessages((messages) => [...messages, [res, true]]);
+    });
+  };
+
   return (
     <>
       <Navbar />
       <main
-        className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
+        className={`flex min-h-screen flex-col items-center justify-between p-24`}
       >
         <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
           <div className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-[180] h-[37]" />
@@ -42,10 +58,21 @@ export default function Home() {
         <div>
           {spinner ? <Spinner /> : <></>}
           {hasFetchedSummary.current ? (
-            <Summary videoId={videoId} summary={summary} />
+            <Summary
+              videoId={videoId}
+              title={title}
+              channel={channel}
+              summary={summary}
+            />
           ) : (
             <></>
           )}
+          <ChatWindow
+            onMessage={(message: string, bot: boolean) =>
+              handleMessage(message)
+            }
+            messages={messages}
+          />
         </div>
 
         <div className="mb-32 mt-10 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">

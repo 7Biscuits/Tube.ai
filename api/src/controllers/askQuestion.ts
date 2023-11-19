@@ -8,8 +8,7 @@ export const askQuestion = async (
   res: Response
 ): Promise<void> => {
   try {
-    const videoId = getVideoId(req.body.yturl);
-    const question = req.body.question;
+    const { videoId, question } = req.body;
     const textFilePath = join(__dirname, "../captions", `${videoId}.txt`);
     const answer = await getAnswer(textFilePath, question);
     res.send(answer);
