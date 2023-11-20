@@ -10,13 +10,13 @@ import { getAnswer } from "@/helpers/getAnswer";
 import { useState, useRef } from "react";
 
 export default function Home(): JSX.Element {
-  const hasFetchedSummary = useRef(false);
-  const [dotPulse, setDotPulse] = useState(false);
-  const [spinner, setSpinner] = useState(false);
-  const [videoId, setVideoId] = useState("");
-  const [title, setTitle] = useState("");
-  const [channel, setChannel] = useState("");
-  const [summary, setSummary] = useState("");
+  const hasFetchedSummary = useRef<boolean>(false);
+  const [spinner, setSpinner] = useState<boolean>(false);
+  const [videoId, setVideoId] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [channel, setChannel] = useState<string>("");
+  const [summary, setSummary] = useState<string>("");
+  const [dotPulse, setDotPulse] = useState<boolean>(false);
   const [messages, setMessages] = useState<Array<[string, boolean]>>([]);
 
   const handleGetSummary = async (yturl: string): Promise<void> => {
@@ -29,8 +29,8 @@ export default function Home(): JSX.Element {
         setTitle(title);
         setChannel(channel);
       });
-      await getSummary(video_id).then((sm: string): void => {
-        setSummary(sm);
+      await getSummary(video_id).then((summary: string): void => {
+        setSummary(summary);
         setSpinner(false);
         hasFetchedSummary.current = true;
       });
@@ -60,7 +60,7 @@ export default function Home(): JSX.Element {
       >
         <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
           <div className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-[180] h-[37]" />
-          <Hero onGetSummary={(yturl: string) => handleGetSummary(yturl)} />
+          <Hero btnIsDisabled={!hasFetchedSummary.current} onGetSummary={(yturl: string) => handleGetSummary(yturl)} />
         </div>
         <div>
           {spinner ? <Spinner /> : <></>}

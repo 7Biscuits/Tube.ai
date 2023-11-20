@@ -14,7 +14,7 @@ export default function ChatWindow({
   messages: Array<any>;
   hasReceivedAnswer: boolean;
 }): JSX.Element {
-  const btnIsDisabled = useRef(false);
+  const btnIsDisabled = useRef(true);
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (!e.target?.input?.value) return alert("Please write a question");
