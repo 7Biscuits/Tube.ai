@@ -1,4 +1,5 @@
 import Textbox from "./textBox";
+import { useRef } from "react";
 
 type TGetSummary = (input: string) => void;
 
@@ -7,6 +8,7 @@ export default function Hero({
 }: {
   onGetSummary: TGetSummary;
 }): JSX.Element {
+  const btnIsDisabled = useRef(true);
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (!e.target?.input?.value) return alert("Please enter a youtube url");
@@ -23,7 +25,7 @@ export default function Hero({
             YouTube Summarizer and Chatbot
           </p>
           <div className="w-max mx-auto">
-            <Textbox handleSubmit={handleSubmit} label="Paste youtube video url" btnText="Summarize" />
+            <Textbox btnIsDisabled={btnIsDisabled.current} handleSubmit={handleSubmit} label="Paste youtube video url" btnText="Summarize" />
           </div>
         </div>
       </div>

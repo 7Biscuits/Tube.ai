@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { getAnswer } from "../helpers/ai/llm";
 import { join } from "path";
-import { getVideoId } from "../helpers/getVideoId";
 
 export const askQuestion = async (
   req: Request,

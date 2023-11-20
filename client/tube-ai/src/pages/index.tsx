@@ -7,10 +7,11 @@ import { getVideoID } from "ytdl-core";
 import { getVideoInfo } from "@/helpers/getVideoInfo";
 import { getSummary } from "@/helpers/getSummary";
 import { getAnswer } from "@/helpers/getAnswer";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
-export default function Home() {
+export default function Home(): JSX.Element {
   const hasFetchedSummary = useRef(false);
+  const [dotPulse, setDotPulse] = useState(false);
   const [spinner, setSpinner] = useState(false);
   const [videoId, setVideoId] = useState("");
   const [title, setTitle] = useState("");
@@ -18,31 +19,37 @@ export default function Home() {
   const [summary, setSummary] = useState("");
   const [messages, setMessages] = useState<Array<[string, boolean]>>([]);
 
-  useEffect(() => {
-    console.log("Updated messages:\n", messages);
-  }, [messages]);
-
   const handleGetSummary = async (yturl: string): Promise<void> => {
-    setSpinner(true);
-    const video_id = getVideoID(yturl);
-    setVideoId(video_id);
-    await getVideoInfo(yturl).then(({ title, channel }): void => {
-      setTitle(title);
-      setChannel(channel);
-    });
-    await getSummary(video_id).then((sm: string): void => {
-      setSummary(sm);
-      setSpinner(false);
-      hasFetchedSummary.current = true;
-    });
-    hasFetchedSummary.current = true;
+    try {
+      hasFetchedSummary.current = false;
+      const video_id = getVideoID(yturl);
+      setSpinner(true);
+      setVideoId(video_id);
+      await getVideoInfo(yturl).then(({ title, channel }): void => {
+        setTitle(title);
+        setChannel(channel);
+      });
+      await getSummary(video_id).then((sm: string): void => {
+        setSummary(sm);
+        setSpinner(false);
+        hasFetchedSummary.current = true;
+      });
+    } catch (e) {
+      return alert(e);
+    }
   };
 
   const handleMessage = async (message: string) => {
-    setMessages((messages) => [...messages, [message, false]]);
-    await getAnswer(videoId, message).then((res) => {
-      setMessages((messages) => [...messages, [res, true]]);
-    });
+    try {
+      setMessages((messages) => [...messages, [message, false]]);
+      setDotPulse(true);
+      await getAnswer(videoId, message).then((res) => {
+        setMessages((messages) => [...messages, [res, true]]);
+        setDotPulse(false);
+      });
+    } catch (e) {
+      alert(e);
+    }
   };
 
   return (
@@ -68,10 +75,11 @@ export default function Home() {
             <></>
           )}
           <ChatWindow
-            onMessage={(message: string, bot: boolean) =>
+            onMessage={(message: string): Promise<void> =>
               handleMessage(message)
             }
             messages={messages}
+            hasReceivedAnswer={dotPulse}
           />
         </div>
 
