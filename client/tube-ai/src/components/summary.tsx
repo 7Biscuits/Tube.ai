@@ -1,11 +1,11 @@
 import YouTube, { YouTubeProps } from "react-youtube";
-import { useState } from "react";
 
-type TVideoInfo = {
+interface ISummaryProps {
   videoId: string;
   title: string;
   channel: string;
   summary: string;
+  onToggle: () => void;
 };
 
 export default function Summary({
@@ -13,7 +13,8 @@ export default function Summary({
   title,
   channel,
   summary,
-}: TVideoInfo): JSX.Element {
+  onToggle
+}: ISummaryProps): JSX.Element {
   const opts: YouTubeProps["opts"] = {
     width: "550",
     height: "315",
@@ -28,16 +29,16 @@ export default function Summary({
         <h5 className="mb-2 text-2xl font-mono font-semibold tracking-tight text-gray-900 dark:text-white">
           Summary
         </h5>
-        <h5 className="mb-2 text-lg font-mono font-semibold tracking-tight text-gray-900 dark:text-white">
-          <p>Title: {title}</p>
-          <p>Channel: {channel}</p>
+        <h5 className="mb-2 text-md font-mono tracking-tight text-gray-900 dark:text-white">
+          <span className="font-semibold">Title: </span> {title} <br />
+          <span className="font-semibold">Channel: </span> {channel}
         </h5>
-        <div className="mb-3 font-normal text-md p-2 w-full pb-12 text-gray-700 dark:text-gray-400">
+        <div className="mb-3 font-normal text-lg p-2 w-full pb-12 text-gray-700 dark:text-gray-400">
           {summary}
           {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ipsam delectus explicabo. In, quos quibusdam tempora iste doloremque natus praesentium! */}
         </div>
         <div
-          
+          onClick={onToggle}
           className="inline-flex ml-2 rounded bg-neutral-50 px-4 pb-2.5 pt-2.5 text-sm font-medium font-mono leading-normal text-neutral-800 shadow-[0_4px_9px_-4px_#cbcbcb] transition duration-150 ease-in-out hover:bg-neutral-100 hover:shadow-[0_8px_9px_-4px_rgba(203,203,203,0.3),0_4px_18px_0_rgba(203,203,203,0.2)] focus:bg-neutral-100 focus:shadow-[0_8px_9px_-4px_rgba(203,203,203,0.3),0_4px_18px_0_rgba(203,203,203,0.2)] focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-[0_8px_9px_-4px_rgba(203,203,203,0.3),0_4px_18px_0_rgba(203,203,203,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(251,251,251,0.3)] dark:hover:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.1),0_4px_18px_0_rgba(251,251,251,0.05)] dark:focus:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.1),0_4px_18px_0_rgba(251,251,251,0.05)] dark:active:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.1),0_4px_18px_0_rgba(251,251,251,0.05)] cursor-pointer"
         >
           Ask questions

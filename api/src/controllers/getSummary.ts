@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getAudio } from "../helpers/getAudio";
 import { checkCaptions, getCaptions } from "../helpers/getCaptions";
+import { getVideoInfo } from "../helpers/getVideoInfo";
 import { extractText } from "../helpers/ai/whisper";
 import { generateSummary } from "../helpers/ai/llm";
 import { summarizePrompt } from "../helpers/ai/prompts/summarize";
@@ -14,11 +15,18 @@ export const getSummary = async (
   try {
     const videoId = req.body.videoid;
     const textFilePath = join(__dirname, "../captions", `${videoId}.txt`);
+    const { title, channel } = await getVideoInfo(videoId);
 
     if (await checkCaptions(videoId)) {
       const captions = await getCaptions(videoId);
       const summary = await generateSummary(captions, summarizePrompt);
-      res.send(summary);
+
+      res.json({
+        title: title,
+        channel: channel,
+        summary: summary,
+      });
+      
       if (!existsSync(textFilePath))
         writeFileSync(textFilePath, captions, "utf-8");
       return;
@@ -28,7 +36,13 @@ export const getSummary = async (
     if (!existsSync(audioFilePath)) await getAudio(videoId); // downloads audio if audio doesn't exist.
     const transcribedText = await extractText(audioFilePath);
     const summary = await generateSummary(transcribedText, summarizePrompt);
-    res.send(summary);
+
+    res.json({
+      title: title,
+      channel: channel,
+      summary: summary,
+    });
+
     if (!existsSync(textFilePath))
       writeFileSync(textFilePath, transcribedText, "utf-8");
   } catch (error) {

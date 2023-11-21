@@ -5,10 +5,10 @@ type TGetSummary = (input: string) => void;
 
 export default function Hero({
   onGetSummary,
-  btnIsDisabled
+  isDisabledBtn
 }: {
   onGetSummary: TGetSummary,
-  btnIsDisabled: boolean
+  isDisabledBtn: boolean
 }): JSX.Element {
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -26,7 +26,7 @@ export default function Hero({
             YouTube Summarizer and Chatbot
           </p>
           <div className="w-max mx-auto">
-            <Textbox btnIsDisabled={!btnIsDisabled} handleSubmit={handleSubmit} label="Paste youtube video url" btnText="Summarize" />
+            <Textbox btnIsDisabled={isDisabledBtn} handleSubmit={handleSubmit} label="Paste youtube video url" btnText="Summarize" />
           </div>
         </div>
       </div>

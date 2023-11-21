@@ -5,8 +5,8 @@ interface IVideoInfo {
   channel: string;
 }
 
-export async function getVideoInfo(videoUrl: string): Promise<IVideoInfo> {
-  const videoInfo = await getInfo(videoUrl);
+export async function getVideoInfo(videoId: string): Promise<IVideoInfo> {
+  const videoInfo = await getInfo(videoId);
   return {
     title: videoInfo.videoDetails.title,
     channel: videoInfo.videoDetails.author.name,
