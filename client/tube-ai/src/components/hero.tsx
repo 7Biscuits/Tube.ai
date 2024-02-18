@@ -6,10 +6,10 @@ type TGetSummary = (input: string) => void;
 export default function Hero({
   onGetSummary,
   isDisabledBtn
-}: {
+}: Readonly<{
   onGetSummary: TGetSummary,
   isDisabledBtn: boolean
-}): JSX.Element {
+}>): JSX.Element {
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (!e.target?.input?.value) return alert("Please enter a youtube url");

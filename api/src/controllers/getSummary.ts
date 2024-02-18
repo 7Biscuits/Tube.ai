@@ -33,7 +33,7 @@ export const getSummary = async (
     }
     const audioFilePath = join(__dirname, "../downloads", `${videoId}.mp3`);
 
-    if (!existsSync(audioFilePath)) await getAudio(videoId); // downloads audio if audio doesn't exist.
+    if (!existsSync(audioFilePath)) await getAudio(videoId); // download audio if audio doesn't exist.
     const transcribedText = await extractText(audioFilePath);
     const summary = await generateSummary(transcribedText, summarizePrompt);
 
